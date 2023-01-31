@@ -2,7 +2,7 @@
 // 4 первый промис появляется через firstDelay секунд
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
-refs = {
+const refs = {
   form: document.querySelector('form'),
   firstDelayInput: document.querySelector('[name=delay]'),
   delayStepInput: document.querySelector('[name=step]'),
