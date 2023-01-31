@@ -16,3 +16,17 @@ img {
   display: block;
   max-width: 100%;
 }
+
+.timer {
+  display: inline-flex;
+  gap: 50px;
+  margin-left: 50px;
+}
+
+.timer .value {
+  font-size: 50px;
+}
+
+.timer .label {
+  font-weight: 300;
+}

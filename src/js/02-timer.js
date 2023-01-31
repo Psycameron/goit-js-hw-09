@@ -1,6 +1,3 @@
-// 3 подключить библиотеку flatpickr и настроить ее (алерт, опции)
-// 4 поставить проверку текущей даты к выбранной и активацию кнопки
-// 5 добавить функцию на отрображение времени из 0 в 00
 // 6 сделать минимальное оформление элементов
 // 7 вместо алерта можно подключить notifix
 
@@ -10,21 +7,24 @@ import 'flatpickr/dist/flatpickr.min.css';
 const refs = {
   input: document.querySelector('#datetime-picker'),
   startBtn: document.querySelector('button[data-start]'),
+  days: document.querySelector('[data-days]'),
+  hours: document.querySelector('[data-hours]'),
+  mins: document.querySelector('[data-minutes]'),
+  secs: document.querySelector('[data-seconds]'),
 };
 const alertMsg = 'Please choose a date in the future';
 
 const timer = {
+  intervalId: null,
   start() {
-    const startTime = Date.now();
-    console.log(`🚀 ~ start ~ startTime`, startTime);
-
-    setInterval(() => {
+    this.intervalId = setInterval(() => {
       const currentTime = Date.now();
-      console.log(`🚀 ~ setInterval ~ currentTime`, currentTime);
+      const selectedTime = new Date(refs.input.value);
 
-      deltaTime = currentTime - startTime;
+      deltaTime = selectedTime.getTime() - currentTime;
       const timeComponents = convertMs(deltaTime);
-      //   console.log(`🚀 ~ setInterval ~ timeComponents`, timeComponents);
+
+      updateTimer(timeComponents);
     }, 1000);
   },
 };
@@ -34,12 +34,15 @@ const options = {
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
+
   onClose(selectedDates) {
     if (selectedDates[0].getTime() > options.defaultDate.getTime()) {
-      //   console.log(
-      //     options.onClose(selectedDates[0]).getTime() -
-      //       options.defaultDate.getTime()
-      //   );
+      console.log(
+        (deltaTime = convertMs(
+          selectedDates[0].getTime() - options.defaultDate.getTime()
+        ))
+      );
+
       refs.startBtn.disabled = false;
     } else {
       alert(alertMsg);
@@ -47,16 +50,24 @@ const options = {
   },
 };
 
-timer.start();
-
 flatpickr(refs.input, options);
 
 refs.startBtn.disabled = true;
 refs.startBtn.addEventListener('click', onStartBtn);
 
-function onStartBtn(e) {
-  //   console.log(options.onClose().getTime() - options.defaultDate.getTime());
-  console.log(e);
+function onStartBtn() {
+  timer.start();
+}
+
+function addLeadingZero(value) {
+  return String(value).padStart(2, '0');
+}
+
+function updateTimer({ days, hours, minutes, seconds }) {
+  refs.days.textContent = addLeadingZero(days);
+  refs.hours.textContent = addLeadingZero(hours);
+  refs.mins.textContent = addLeadingZero(minutes);
+  refs.secs.textContent = addLeadingZero(seconds);
 }
 
 function convertMs(ms) {
@@ -77,6 +88,3 @@ function convertMs(ms) {
 
   return { days, hours, minutes, seconds };
 }
-// console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
-// console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
-// console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
