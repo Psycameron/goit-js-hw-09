@@ -13,6 +13,7 @@ const refs = {
   secs: document.querySelector('[data-seconds]'),
 };
 const alertMsg = 'Please choose a date in the future';
+let deltaTime = null;
 
 const timer = {
   intervalId: null,
