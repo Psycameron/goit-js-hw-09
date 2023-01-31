@@ -5,6 +5,7 @@ const refs = {
   stopBtn: document.querySelector('button[data-stop]'),
   body: document.body,
 };
+let timerId = null;
 
 refs.startBtn.addEventListener('click', onStartBtn);
 refs.stopBtn.addEventListener('click', onStopBtn);
